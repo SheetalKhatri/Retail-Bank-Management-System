@@ -1,0 +1,71 @@
+﻿@using RetailBankManagementSystem.ViewModels
+@model RetailBankManagementSystem.Models.PagingList<CustomerAcc>
+@{
+    ViewData["Title"] = "Account Status";
+}
+
+<h1>Account Status</h1>
+<br />
+@*<a asp-controller="Executive" asp-action="Create">Add New Customer</a>*@
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Customer Id</th>
+            <th>SSN</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Age</th>
+            <th>Status</th>
+            <th>Action</th>
+
+        </tr>
+    </thead>
+    @foreach (var b in Model)
+    {
+        <tr>
+            <td> @b.CustomerID</td>
+            <td> @b.SSN</td>
+            <td> @b.Name</td>
+            <td> @b.Address</td>
+            <td> @b.City</td>
+            <td> @b.State</td>
+            <td> @b.Age</td>
+            <td> @b.Status</td>
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { Id = b.Id })*@
+                @Html.ActionLink("Delete", "DeleteCustomer", new { CustomerId = @b.CustomerID })
+            </td>
+        </tr>
+
+
+
+
+    }
+</table>
+
+<br />
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    var totalPageNo = Model.TotalPageNo;
+    var currentPageNo = Model.PageIndex;
+}
+
+<div class="row justify-content-center">
+    <a asp-action="ViewStatus"
+       asp-route-pageNo="@(Model.PageIndex - 1)"
+       class="btn btn-dark @prevDisabled">
+        Previous
+    </a>
+    <a asp-action="ViewStatus"
+       asp-route-pageNo="@(Model.PageIndex + 1)"
+       class="btn btn-dark @nextDisabled">
+        Next
+    </a>
+    <span>
+        Page No : @currentPageNo of @totalPageNo
+    </span>
+</div>

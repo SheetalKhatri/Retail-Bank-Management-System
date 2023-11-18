@@ -1,0 +1,162 @@
+﻿@using RetailBankManagementSystem.ViewModels
+@model TransferViewModel
+@{
+    ViewData["Title"] = "Transfer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .myformcontainer {
+        display: flex;
+        margin: auto;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 10px;
+        border-radius: 10px;
+        box-shadow: 0 0.4px 0.4px rgba(128, 128, 128, 0.109), 0 1px 1px rgba(128, 128, 128, 0.155), 0 2.1px 2.1px rgba(128, 128, 128, 0.195), 0 4.4px 4.4px rgba(128, 128, 128, 0.241), 0 12px 12px rgba(128, 128, 128, 0.35);
+        */
+    }
+</style>
+<h4 align="center">Transfer</h4>
+<hr />
+<br />
+<form asp-action="Transfer">
+    <table class="table table-borderless">
+        <tr>
+            <th>FROM</th>
+            <th>TO</th>
+            <th>AMOUNT</th>
+        </tr>
+        <tr>
+            <td>
+                <table  class="myformcontainer">
+                    <tr>
+                        <td>
+                            <label style="font-weight: bold" asp-for="SourceAccount.CustomerID"></label>:
+                        </td>
+                        <td>
+                            @Model.SourceAccount.CustomerID
+                            <input type="hidden" asp-for="SourceAccount.CustomerID" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label style="font-weight: bold" asp-for="SourceAccount.AccountID"></label>:
+                        </td>
+                        <td>
+                            @Model.SourceAccount.AccountID
+                            <input type="hidden" asp-for="SourceAccount.AccountID" />
+                            <input type="hidden" asp-for="SourceAccount.AccountType" />
+                            <input type="hidden" asp-for="SourceAccount.AccountStatus" />
+                            <input type="hidden" asp-for="SourceAccount.CreateDate" />
+                            <input type="hidden" asp-for="SourceAccount.Duration" />
+                            <input type="hidden" asp-for="SourceAccount.LastUpdated" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label style="font-weight: bold" asp-for="SourceAccount.Balance"></label>:
+                        </td>
+                        <td>
+                            $@Model.SourceAccount.Balance
+                            <input type="hidden" asp-for="SourceAccount.Balance" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table class="myformcontainer">
+                    <tr>
+                        <td>
+                            <label style="font-weight: bold">Enter Target Account ID Number:</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="number" asp-for="TargetAccountID" />
+                            <br />
+                            <span class="text-danger small" asp-validation-for="TargetAccountID"></span>
+                            @if (@TempData["InvalidAccount"] != null)
+                            {
+                                <br />
+                                <span class="text-danger small">@TempData["InvalidAccount"]</span>
+                            }
+                            @if (@TempData["InvalidAccounts"] != null)
+                            {
+                                <br />
+                                <span class="text-danger small">@TempData["InvalidAccounts"]</span>
+                            }
+                            @if (TempData["InactiveAccount"] != null)
+                            {
+                                <br />
+                                <span class="text-danger small">@TempData["InactiveAccount"]</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Or Search by Customer ID:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="number" asp-for="TargetCustomerID" />
+                            &nbsp;&nbsp;
+                            <input type="submit" class="btn btn-sm btn-secondary" value="Search" />
+                        </td>
+                    </tr>
+                    @if (Model.Accounts.Count != 0)
+                    {
+                        <tr>
+                            <td>
+                                <table class="table table-bordered table-sm" style="background-color:white">
+                                    <thead  class="thead-dark">
+                                        <th>Account ID</th>
+                                        <th>Balance</th>
+                                    </thead>
+                                    @foreach (Account a in Model.Accounts)
+                                    {
+                                        <tr>
+                                            <td>@a.AccountID</td>
+                                            <td>$@a.Balance</td>
+
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                    @if(Model.Accounts.Count==0 && Model.Searched==true)
+            {
+                <tr>
+                    <td>
+                        <span class="text-danger small">@TempData["NoAccounts"]</span>
+                    </td>
+                </tr>
+            }
+                </table>
+            </td>
+            <td>
+                <table  class="myformcontainer">
+                    <tr>
+                        <td>
+                            $<input type="number" asp-for="AmountToTransfer" /><br />
+                            <span class="text-danger small" asp-validation-for="AmountToTransfer"></span>
+                            @if (@TempData["InvalidBalance"] != null)
+                            {
+                                <span class="text-danger small">@TempData["InvalidBalance"]</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" value="Transfer Money" class="btn btn-primary" />
+                            <a class="btn btn-secondary" asp-controller="Cashier" asp-action="Index">Cancel</a>
+
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</form>
+

@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .card {
+        border: none;
+        background-color: lavender;
+        text-align: center;
+        flex: 0 1 calc(25% - 1em);
+    }
+</style>
+
+<div class="container">
+    <h4>Welcome to Retail Banking Services</h4>
+    <hr />
+    <br />
+    <div class="col-md-6 float-left">
+        <hr />
+        <h4>Banking made smart and simple</h4>
+        <hr />
+        <p>The easiest way to manage your finances directly in-app</p>
+    </div>
+    <div class="col-md-6 float-right">
+        <img width="500"
+             height="337"
+             style="width: 500px; height: 337px;" src="~/images/piggy.PNG" />
+    </div>
+    <br />
+    <div class="col-md-6 float-left">
+
+        <section class="cards">
+
+            <article class="card">
+                <img width="120" height="120" style="height: 110px; width:110px;" src="~/images/open_account.png" />
+                <p class="small">Open checking or savings account online</p>
+            </article><!-- /card-one -->
+
+            <article class="card">
+                <img width="120" height="120" style="height: 110px; width:110px;" src="~/images/transfer.jpg" />
+                <p class="small">Transfer money electronically</p>
+            </article><!-- /card-two -->
+
+            <article class="card">
+                <img width="120" height="120" style="height: 110px; width:110px;" src="~/images/statement.PNG" />
+                <p class="small">View account statements online</p>
+            </article><!-- /card-three -->
+
+            <article class="card">
+                <img width="120" height="120" style="height: 110px; width:110px;" src="~/images/withdraw_deposit.png" />
+                <p class="small">Deposit/Withdraw funds online</p>
+            </article><!-- /card-four -->
+
+        </section>
+        @if (!SignInManager.IsSignedIn(User))
+        {
+            <div class="align-bottom">
+                <a class="btn btn-info btn-lg" style="margin-top: 10px" asp-area="Identity" asp-page="/Account/Login">Get Started</a>
+            </div>
+        }
+    </div>
+
+    
+</div>

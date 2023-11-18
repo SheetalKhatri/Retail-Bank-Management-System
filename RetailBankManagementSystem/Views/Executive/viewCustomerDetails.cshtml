@@ -1,0 +1,110 @@
+﻿@model Customer
+@{
+    ViewData["Title"] = "viewCustomerDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .myformcontainer {
+        display: flex;
+        margin: auto;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 10px;
+        color: white;
+        background-color: lavender;
+        border-radius: 10px;
+        box-shadow: 0 0.4px 0.4px rgba(128, 128, 128, 0.109), 0 1px 1px rgba(128, 128, 128, 0.155), 0 2.1px 2.1px rgba(128, 128, 128, 0.195), 0 4.4px 4.4px rgba(128, 128, 128, 0.241), 0 12px 12px rgba(128, 128, 128, 0.35);
+        */
+    }
+
+    .containers {
+        height: 60px;
+        margin-left: -150px;
+        position: relative;
+    }
+
+    .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+</style>
+
+<h4 class="text-center">Customer Details</h4>
+<hr />
+<br>
+<div class="row justify-content-center" style="margin:auto">
+    <form asp-action="SearchCustomer" class="myformcontainer">
+        <table align="center" class="table table-borderless d-sm-table-cell">
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="CustomerID"></label>
+                </td>
+                <td>
+                    @Model.CustomerID
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="Name"></label>
+                </td>
+                <td>
+                    @Model.Name
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="SSN"></label>
+                </td>
+                <td>
+                    @Model.SSN
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="Address"></label>
+                </td>
+                <td>
+                    @Model.Address
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="City"></label>
+                </td>
+                <td>
+                    @Model.City
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="State"></label>
+                </td>
+                <td>
+                    @Model.State
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="Age"></label>
+                </td>
+                <td>
+                    @Model.Age
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold"> Action</label>
+                </td>
+                <td>
+                    @Html.ActionLink("Create Account", "CreateAccount", new { CustomerID = Model.CustomerID }) |
+                    @Html.ActionLink("Delete", "DeleteCustomer", new { CustomerID = Model.CustomerID }) |
+                    @Html.ActionLink("Update", "UpdateCustomer", new { CustomerID = Model.CustomerID })
+                </td>
+        </table>
+                <a asp-controller="Executive" asp-action="SearchCustomer" style="margin:auto" class="btn btn-dark">Back to Search</a>
+    </form>
+</div>

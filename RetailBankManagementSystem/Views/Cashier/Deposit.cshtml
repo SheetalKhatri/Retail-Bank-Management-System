@@ -1,0 +1,96 @@
+﻿@using RetailBankManagementSystem.ViewModels
+@model CashierDepositViewModel
+@{
+    ViewData["Title"] = "Deposit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .myformcontainer {
+        display: flex;
+        margin: auto;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 10px;
+        color: white;
+        background-color: lavender;
+        border-radius: 10px;
+        box-shadow: 0 0.4px 0.4px rgba(128, 128, 128, 0.109), 0 1px 1px rgba(128, 128, 128, 0.155), 0 2.1px 2.1px rgba(128, 128, 128, 0.195), 0 4.4px 4.4px rgba(128, 128, 128, 0.241), 0 12px 12px rgba(128, 128, 128, 0.35);
+        */
+    }
+
+    .containers {
+        height: 60px;
+        margin-left: -150px;
+        position: relative;
+    }
+
+    .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+</style>
+
+<div class="container">
+
+    <h4 style="text-align: center">Deposit Money</h4>
+    <hr />
+    <br />
+    <div class="row justify-content-center" style="margin:auto">
+        <form asp-action="Deposit" class="myformcontainer">
+            <table align="center" class="table table-borderless d-sm-table-cell">
+                <tr>
+                    <td><label for="customerId"><b>Customer ID:</b></label></td>
+                    <td>
+                        @Model.CustomerID
+                        <input type="hidden" asp-for="CustomerID" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="accountId"><b>Account ID:</b></label></td>
+                    <td>
+                        @Model.AccountID
+                        <input type="hidden" asp-for="AccountID" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td><label for="accountType"><b>Account Type:</b></label></td>
+                    <td>
+                        @Model.AccountType[0].ToString().ToUpper()@Model.AccountType.Substring(1)
+                        <input type="hidden" asp-for="AccountType" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td><label for="latestBalance"><b>Balance:</b></label></td>
+                    <td>
+                        $@Model.LatestBalance
+                        <input type="hidden" asp-for="LatestBalance" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><label asp-for="DepositAmount"><b>Deposit Amount:</b></label></td>
+                    <td>
+                        $<input type="number" asp-for="DepositAmount" />
+                        <br />
+                        <span asp-validation-for="DepositAmount" class="text-danger small"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="row justify-content-center">
+                            <input type="submit" name="deposit" value="Deposit" class="btn btn-primary" /> &nbsp;&nbsp;
+                            @Html.ActionLink("Cancel", "Index", "Cashier", null, new { @class = "btn btn-secondary" })
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+

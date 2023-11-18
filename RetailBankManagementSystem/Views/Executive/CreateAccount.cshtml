@@ -1,0 +1,139 @@
+﻿@model Account
+@{
+    ViewData["Title"] = "CreateAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .myformcontainer {
+        display: flex;
+        margin: auto;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 10px;
+        color: white;
+        border-radius: 10px;
+        box-shadow: 0 0.4px 0.4px rgba(128, 128, 128, 0.109), 0 1px 1px rgba(128, 128, 128, 0.155), 0 2.1px 2.1px rgba(128, 128, 128, 0.195), 0 4.4px 4.4px rgba(128, 128, 128, 0.241), 0 12px 12px rgba(128, 128, 128, 0.35);
+        */
+    }
+
+    .containers {
+        height: 60px;
+        margin-left: -150px;
+        position: relative;
+    }
+
+    .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+</style>
+
+<script type="text/javascript">
+    window.setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).hide();
+        });
+    }, 2500);
+</script>
+
+<h4 class="text-center ">Create Account</h4>
+<hr />
+<br>
+
+@if (@TempData["exist"] == null)
+{
+    <div class="row justify-content-center " style="margin:auto">
+        <form asp-action="CreateAccount" class="myformcontainer">
+            <table align="center" class="table table-borderless d-sm-table-cell table-sm">
+                <tr>
+                    <td>
+                        <input type="hidden" asp-for="CreateDate" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="hidden" asp-for="LastUpdated" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="hidden" asp-for="Duration" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label style="font-weight: bold" asp-for="CustomerID"></label>
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;@Model.CustomerID
+                        <input type="hidden" asp-for="CustomerID" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label style="font-weight: bold" asp-for="Balance"></label>
+                    </td>
+                    <td>
+                        $<input type="number" asp-for="Balance" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label style="font-weight: bold" asp-for="AccountType"></label>
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;@Html.DropDownListFor(Account => Account.AccountType, new List<SelectListItem>
+         {
+                             new SelectListItem() {Text = "Checking", Value="Checking"},
+                             new SelectListItem() {Text = "Savings", Value="Savings"},
+         })
+                    </td>
+                </tr>
+            </table>
+            <div class="row justify-content-center">
+                <div style="display: inline-flex">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+                &nbsp;&nbsp;
+                <div style="display: inline-flex">
+                    @Html.ActionLink("Cancel", "Index", "Executive", null, new { @class = "btn btn-secondary" })
+
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+@if (@TempData["exist"] != null)
+{
+    <br />
+    <br />
+    <div class="row justify-content-center">
+        <p class="alert alert-danger " style="display:inline-flex">@TempData["exist"].ToString()</p>
+    </div>
+    <div class="row justify-content-center">
+        <input type='button' class="btn btn-dark" value='Home' id='myButton' onClick='redirectOnClick()' />
+    </div>
+    <script>
+        function redirectOnClick() {
+            document.location = 'Index';
+        }
+    </script>
+}
+
+@if (@TempData["account"] != null)
+{
+    <br />
+    <br />
+    <div class="row justify-content-center"><span><p class="alert alert-danger" style="display:inline-flex">@TempData["account"].ToString()</p></span></div>
+}
+
+
+
+
+

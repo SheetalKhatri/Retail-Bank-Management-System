@@ -1,0 +1,109 @@
+﻿@using RetailBankManagementSystem.ViewModels
+@model CustomerUpdateViewModel
+@{
+    ViewData["Title"] = "UpdateCustomer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .myformcontainer {
+        display: flex;
+        margin: auto;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 10px;
+        color: white;
+        background-color: lavender;
+        border-radius: 10px;
+        box-shadow: 0 0.4px 0.4px rgba(128, 128, 128, 0.109), 0 1px 1px rgba(128, 128, 128, 0.155), 0 2.1px 2.1px rgba(128, 128, 128, 0.195), 0 4.4px 4.4px rgba(128, 128, 128, 0.241), 0 12px 12px rgba(128, 128, 128, 0.35);
+        */
+    }
+</style>
+
+<div class="container">
+    <h4 style="text-align: center">Update Customer</h4>
+    <hr />
+    <br />
+    <div class="row justify-content-center">
+        <form asp-action="UpdateCustomer" class="myformcontainer">
+            <table align="center" class="table table-borderless d-sm-table-cell">
+                <tr>
+                    <td>
+                        <label style="font-weight: bold" asp-for="CustomerDetails.SSN"></label>:
+                    </td>
+                    <td>
+                        @Model.CustomerDetails.SSN
+                        <input type="hidden" asp-for="CustomerDetails.SSN" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label style="font-weight: bold" asp-for="CustomerDetails.CustomerID"></label>:
+                    </td>
+                    <td>
+                        @Model.CustomerDetails.CustomerID
+                        <input type="hidden" asp-for="CustomerDetails.CustomerID" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label style="font-weight: bold" asp-for="CustomerDetails.Name"></label>:
+                    </td>
+                    <td>
+                        <input type="text" asp-for="CustomerDetails.Name" /><br />
+                        <span asp-validation-for="CustomerDetails.Name" class="text-danger small"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label style="font-weight: bold" asp-for="Address"></label>:
+                    </td>
+                    <td>
+                        <input type="text" asp-for="Address" /><br />
+                        <span asp-validation-for="Address" class="text-danger small"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label style="font-weight: bold" asp-for="CustomerDetails.State"></label>:
+                    </td>
+                    <td>
+                        <select asp-for="CustomerDetails.State"
+                                asp-items="@(new SelectList(Model.States))"></select>
+                        <span asp-validation-for="CustomerDetails.State" class="text-danger small"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label style="font-weight: bold" asp-for="CustomerDetails.City"></label>:
+                    </td>
+                    <td>
+                        <select asp-for="CustomerDetails.City"
+                                asp-items="@(new SelectList(Model.Cities))">
+                        </select>
+                        <span asp-validation-for="CustomerDetails.City"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label style="font-weight: bold" asp-for="CustomerDetails.Age"></label>:
+                    </td>
+                    <td>
+                        <input type="number" asp-for="CustomerDetails.Age" /><br />
+                        <span asp-validation-for="CustomerDetails.Age" class="text-danger small"></span>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div class="row justify-content-center">
+                <div style="display: inline-flex">
+                    <input type="submit" value="Update Customer" class="btn btn-primary" />
+                </div>
+                &nbsp;&nbsp;
+                <div style="display: inline-flex">
+                    <a class="btn btn-secondary" asp-controller="Executive" asp-action="Index">Cancel</a>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

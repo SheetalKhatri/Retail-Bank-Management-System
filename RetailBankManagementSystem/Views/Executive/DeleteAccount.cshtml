@@ -1,0 +1,143 @@
+﻿@model Account
+@{
+    ViewData["Title"] = "DeleteAccount";
+}
+
+<h5 class="text-center ">Delete Account</h5>
+<hr />
+<br />
+
+@{
+    var balancewarning = "Warning: This account has non-zero balance";
+}
+
+<style>
+    .myformcontainer {
+        display: flex;
+        margin: auto;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 10px;
+        color: white;
+        background-color: lavender;
+        border-radius: 10px;
+        box-shadow: 0 0.4px 0.4px rgba(128, 128, 128, 0.109), 0 1px 1px rgba(128, 128, 128, 0.155), 0 2.1px 2.1px rgba(128, 128, 128, 0.195), 0 4.4px 4.4px rgba(128, 128, 128, 0.241), 0 12px 12px rgba(128, 128, 128, 0.35);
+        */
+    }
+
+    .containers {
+        height: 60px;
+        margin-left: -150px;
+        position: relative;
+    }
+
+    .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+
+    h1 {
+        margin-bottom: 5px;
+    }
+</style>
+
+
+<div class="row justify-content-center" style="margin:auto">
+    <form class="myformcontainer" asp-action="DeleteAccount">
+        >
+        <table class="table table-borderless d-sm-table-cell table-sm">
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="CustomerID">Customer ID</label>
+                </td>
+                <td>
+                    @Model.CustomerID
+                    <input type="hidden" asp-for="CustomerID" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="AccountID">Account ID</label>
+                </td>
+                <td>
+                    @Model.AccountID
+                    <input  type="hidden" asp-for="AccountID" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="AccountStatus">Account Status</label>
+                </td>
+                <td>
+                    @Model.AccountStatus.Substring(0, 1).ToUpper()@Model.AccountStatus.Substring(1)
+                    <input type="hidden" asp-for="AccountStatus" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="AccountType">Account Type</label>
+                </td>
+                <td>
+                    @Model.AccountType.Substring(0, 1).ToUpper()@Model.AccountType.Substring(1)
+                    <input type="hidden" asp-for="AccountType" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="Balance">Balance</label>
+                </td>
+                <td>
+                    $@Model.Balance
+                    <input type="hidden" asp-for="Balance" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="CreateDate"> Create Date</label>
+                </td>
+                <td>
+                    @Model.CreateDate.ToString("MM/dd/yyyy")
+                    <input type="hidden" asp-for="CreateDate" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="LastUpdated">Last Updated</label>
+                </td>
+                <td>
+                    @Model.LastUpdated.ToString("MM/dd/yyyy")
+                    <input type="hidden" asp-for="LastUpdated" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="Duration">Duration</label>
+                </td>
+                <td>
+                    @Model.Duration
+                    <input type="hidden" asp-for="Duration" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+
+                    <input type="submit" value="Delete Account" class="btn btn-danger" />
+                    <a asp-controller="Executive" asp-action="ViewAccountsIndex" style="margin:auto" class="btn btn-dark">Cancel</a>
+
+                    <br />
+                    <br />
+
+                    @if (Model.Balance > 0)
+                    {
+                        <span class="alert alert-warning" style="text-align: center; display: inline-flex">@balancewarning</span>
+                    }
+                </td>
+            </tr>
+        </table>
+
+    </form>
+</div>

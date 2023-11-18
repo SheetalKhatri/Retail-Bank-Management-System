@@ -1,0 +1,166 @@
+﻿@using RetailBankManagementSystem.ViewModels
+@model ViewAccountViewModel
+@{
+    ViewData["Title"] = "ViewAccountsIndex";
+}
+
+<h5>Accounts</h5>
+<hr />
+<br />
+
+@Html.ActionLink("Refresh", "ViewAccountsIndex", new { PageIndex = @Model.Accounts.PageIndex }, new { @class = "btn btn-link", @style = "float: right" })
+
+
+
+@{
+    var prevDisabled = !Model.Accounts.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Accounts.HasNextPage ? "disabled" : "";
+    var totalPageNo = Model.Accounts.TotalPageNo;
+    var currentPageNo = Model.Accounts.PageIndex;
+}
+
+<div>
+    <form asp-action="ViewAccountsIndex" onsubmit="return validateAccountID()">
+        <table>
+            <tr>
+                <td>
+                    <label name="AccountID">Enter Account ID</label>
+                    <input type="number" asp-for="AccountID" id="Count" />
+                    <br />
+                    <span asp-validation-for="AccountID" id="error-message" class="text-danger"></span>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </form>
+</div>
+<script>
+    function validateAccountID() {
+        debugger;
+        var count = document.getElementById('Count').value;
+        var has_count = count != null && count != '';
+
+        if (!has_count) {
+            document.getElementById('error-message').innerHTML = "Enter valid Account ID";
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<br />
+@if (@TempData["accountdeletion"] != null)
+{
+    <div class="row justify-content-center">
+        <span class="alert alert-success alert-dismissible fade show small" style="text-align: center; display:inline-flex">@TempData["accountdeletion"]<button class="close " data-dismiss="alert">&times;</button></span>
+    </div>
+}
+@if (@TempData["accountactivation"] != null)
+{
+    <div class="row justify-content-center">
+        <span class="alert alert-success alert-dismissible fade show small" style="text-align: center; display:inline-flex">@TempData["accountactivation"]<button class="close " data-dismiss="alert">&times;</button></span>
+    </div>
+}
+<br />
+@if (Model.Accounts.NumItems == 0)
+{
+    <div class="row justify-content-center">
+        <span class="alert alert-danger alert-dismissible fade show small" style="text-align: center; display:inline-flex">No accounts found<button class="close " data-dismiss="alert">&times;</button></span>
+    </div>
+}
+else
+{
+    <br />
+    <div class="container">
+
+        <table class="table table-bordered table-sm" style="background-color:white">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Account ID</th>
+                    <th>Account Status</th>
+                    <th>Account Type</th>
+                    <th>Balance</th>
+                    <th>Create Date</th>
+                    <th>Last Updated</th>
+                    <th>Duration</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            @foreach (var account in Model.Accounts)
+            {
+                <tr>
+                    <td>@account.CustomerID</td>
+                    <td> @account.AccountID</td>
+                    <td> @account.AccountStatus.Substring(0, 1).ToUpper()@account.AccountStatus.Substring(1)</td>
+                    <td> @account.AccountType.Substring(0, 1).ToUpper()@account.AccountType.Substring(1)</td>
+                    <td>$@account.Balance</td>
+                    <td> @account.CreateDate.ToString("MM/dd/yyyy")</td>
+                    <td>@account.LastUpdated.ToString("MM/dd/yyyy")</td>
+                    <td>@account.Duration</td>
+
+
+
+                    <td>
+                        <div class="d-md-inline-flex" style="align-content: center">
+                            @Html.ActionLink("Delete", "DeleteAccount", new { ID = @account.AccountID }, new { @class = "btn btn-link", @style = "padding: 0px" })&nbsp;|&nbsp;
+                            @if (account.AccountStatus.ToLower() == "pending")
+                            {
+                                <form asp-action="ActivateAccount">
+                                    <input type="hidden" asp-for="@account.CustomerID" />
+                                    <input type="hidden" asp-for="@account.AccountID" />
+                                    <input type="hidden" asp-for="@account.AccountStatus" />
+                                    <input type="hidden" asp-for="@account.AccountType" />
+                                    <input type="hidden" asp-for="@account.Balance" />
+                                    <input type="hidden" asp-for="@account.CreateDate" />
+                                    <input type="hidden" asp-for="@account.LastUpdated" />
+                                    <input type="hidden" asp-for="@account.Duration" />
+                                    <input type="hidden" asp-for="@Model.Accounts.PageIndex" />
+                                    <input type="submit" class="btn btn-link" style="padding: 0px" value="Activate" />
+                                </form>
+                            }
+                        </div>
+                    </td>
+                </tr>
+
+
+
+
+            }
+        </table>
+    </div>
+
+
+    <br />
+
+    <div class="row justify-content-center">
+        <a asp-action="ViewAccountsIndex"
+           asp-route-PageIndex="@(Model.Accounts.PageIndex - 1)" style="text-decoration: underline"
+           class="btn btn-link @prevDisabled">
+            &lt;&lt; prev
+        </a>
+
+        <span>
+            Page No. : @currentPageNo of @totalPageNo
+        </span>
+
+        <a asp-action="ViewAccountsIndex"
+           asp-route-PageIndex="@(Model.Accounts.PageIndex + 1)" style="text-decoration: underline"
+           class="btn btn-link @nextDisabled">
+            next >>
+        </a>
+    </div>
+}
+
+<br />
+<br />
+
+<script type="text/javascript">
+    window.setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).hide();
+        });
+    }, 5000);
+</script>

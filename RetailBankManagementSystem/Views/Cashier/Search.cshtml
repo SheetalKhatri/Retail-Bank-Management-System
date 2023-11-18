@@ -1,0 +1,170 @@
+﻿@using RetailBankManagementSystem.ViewModels
+@model CashierSearchViewModel
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .myformcontainer {
+        display: flex;
+        margin: auto;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 10px;
+        color: white;
+        background-color: lavender;
+        border-radius: 10px;
+        box-shadow: 0 0.4px 0.4px rgba(128, 128, 128, 0.109), 0 1px 1px rgba(128, 128, 128, 0.155), 0 2.1px 2.1px rgba(128, 128, 128, 0.195), 0 4.4px 4.4px rgba(128, 128, 128, 0.241), 0 12px 12px rgba(128, 128, 128, 0.35);
+        */
+    }
+
+    .containers {
+        height: 60px;
+        margin-left: -150px;
+        position: relative;
+    }
+
+    .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+</style>
+
+<h4 class="text-center">Account Search</h4>
+<hr />
+<br />
+<div class="container">
+    <div class="row justify-content-center" style="margin:auto">
+
+        <form id="searchForm" asp-action="Search" class="myformcontainer">
+            <table align="center" class="table table-borderless d-sm-table-cell table-sm">
+                <tr>
+                    <td><label for="customerID"><b>Customer ID:</b></label></td>
+                    <td>
+                        <input type="text" asp-for="CustomerID" id="customerID" />
+                        <br />
+                        <span asp-validation-for="CustomerID" id="customerIdVal" class="text-danger small"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center"><b>OR</b></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="accountID">
+                            <b>Account ID:</b>
+                        </label>
+                    </td>
+                    <td>
+                        <input type="text" asp-for="AccountID" id="accountID" />
+                        <br />
+                        <span asp-validation-for="AccountID" id="accountIdVal" class="text-danger small"></span>
+                    </td>
+                </tr>
+                @if (@ViewData["provideSearchParams"] != null)
+                {
+                    <tr>
+                        <td colspan="2" style="text-align: center">
+                            <span id="provideSearchParams" class="text-danger small">@ViewData["provideSearchParams"]</span>
+                        </td>
+                    </tr>
+                }
+                <script type="text/javascript">
+                    document.getElementById('customerID').onchange = function () {
+                        if (this.value != '') {
+                            document.getElementById("accountID").disabled = true;
+                        }
+                        else {
+                            document.getElementById("accountID").disabled = false;
+                        }
+                    }
+                    document.getElementById('accountID').onchange = function () {
+                        if (this.value != '') {
+                            document.getElementById("customerID").disabled = true;
+                        }
+                        else {
+                            document.getElementById("customerID").disabled = false;
+                        }
+                    }
+
+                    window.setTimeout(function () {
+                        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                            $(this).hide();
+                        });
+                    }, 5000);
+                </script>
+            </table>
+            <div class="row justify-content-center">
+                <div style="display: inline-flex">
+                    <input type="submit" value="Search" id="searchSubmitButton" class="btn btn-primary" />
+                </div>
+                <div style="display: inline-flex">
+                    &nbsp;&nbsp;
+                    @Html.ActionLink("Cancel", "Index", "Cashier", null, new { @class = "btn btn-secondary" })
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (@TempData["accountsExist"] != null)
+{
+    <br />
+    <div class="row justify-content-center">
+        <span class="alert alert-danger small" style="text-align:center; display: inline-flex">@TempData["accountsExist"]</span>
+    </div>
+}
+
+@if (Model.Accounts != null && @TempData["accountsExist"] == null)
+{
+    <br />
+    <div class="container">
+        <table class="table table-bordered table-sm" style="background-color:white">
+            <thead class="thead-dark">
+            <th>Customer ID</th>
+            <th>Account ID</th>
+            <th>Account Type</th>
+            <th>Balance</th>
+            <th>Action</th>
+            </thead>
+            @foreach (Account account in Model.Accounts)
+            {
+                <tr>
+                    <td>
+                        @account.CustomerID
+                    </td>
+                    <td>
+                        @account.AccountID
+                    </td>
+                    <td>
+                        @account.AccountType[0].ToString().ToUpper()@account.AccountType.Substring(1)
+                    </td>
+                    <td>
+                        $@account.Balance
+                    </td>
+                    @if (account.AccountStatus.ToLower().Equals("pending"))
+                    {
+                        <td>
+                            <span class="text-danger">Account is not active</span>
+                        </td>
+                    }
+                    @if (!account.AccountStatus.ToLower().Equals("pending"))
+                    {
+                        <td>
+                            @Html.ActionLink("Deposit", "Deposit", "Cashier", new { accountID = account.AccountID }) |
+                            @Html.ActionLink("Withdraw", "Withdraw", "Cashier", new { accountID = account.AccountID }) |
+                            @Html.ActionLink("Transfer", "Transfer", new { AccountID = account.AccountID }) |
+                            @Html.ActionLink("Statement", "ViewStatement", "Cashier", new { ID = account.AccountID })
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+}
+
+

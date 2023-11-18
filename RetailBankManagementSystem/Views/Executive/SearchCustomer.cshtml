@@ -1,0 +1,117 @@
+﻿@*@model Customer*@
+@using RetailBankManagementSystem.ViewModels
+@model CustSearch
+@{
+    ViewData["Title"] = "SearchCustomer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .myformcontainer {
+        display: flex;
+        margin: auto;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 10px;
+        color: white;
+        background-color: lavender;
+        border-radius: 10px;
+        box-shadow: 0 0.4px 0.4px rgba(128, 128, 128, 0.109), 0 1px 1px rgba(128, 128, 128, 0.155), 0 2.1px 2.1px rgba(128, 128, 128, 0.195), 0 4.4px 4.4px rgba(128, 128, 128, 0.241), 0 12px 12px rgba(128, 128, 128, 0.35);
+    }
+
+    .containers {
+        height: 60px;
+        margin-left: -150px;
+        position: relative;
+    }
+
+    .vertical-center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+</style>
+
+<script type="text/javascript">
+    window.setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).hide();
+        });
+    }, 1500);
+</script>
+
+<h4 class="text-center ">Search Customer</h4>
+<hr />
+<br>
+<div class="row justify-content-center " style="margin:auto">
+    <form asp-action="SearchCustomer" class="myformcontainer">
+        <table align="center" class="table table-borderless d-sm-table-cell table-sm">
+            <tr>
+                <td>
+                    <label style="font-weight: bold" asp-for="CustomerID"></label>
+                </td>
+
+                <td>
+
+                    <input type="number" asp-for="CustomerID" />
+                    <br />
+                    <span asp-validation-for="CustomerID" class="text-danger small"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center"><b>OR</b></td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight: bold" asp-for="SSN"></label>
+                </td>
+                <td>
+                    <input type="number" asp-for="SSN" />
+                    <span asp-validation-for="SSN" class="text-danger small"></span>
+                </td>
+            </tr>
+            <script type="text/javascript">
+                document.getElementById('CustomerID').onchange = function () {
+                    if (this.value != '') {
+                        document.getElementById("SSN").disabled = true;
+                    }
+                    else {
+                        document.getElementById("SSN").disabled = false;
+                    }
+                }
+                document.getElementById('SSN').onchange = function () {
+                    if (this.value != '') {
+                        document.getElementById("CustomerID").disabled = true;
+                    }
+                    else {
+                        document.getElementById("CustomerID").disabled = false;
+                    }
+                }
+            </script>
+        </table>
+        <div class="row justify-content-center">
+            <div style="display: inline-flex"><input type="submit" value="Search Customer" class="btn btn-primary " /></div>
+
+            &nbsp;&nbsp;
+            <div style="display: inline-flex">
+                @Html.ActionLink("Cancel", "Index", "Executive", null, new { @class = "btn btn-secondary" })
+
+            </div>
+        </div>
+    </form>
+</div>
+
+@if (@ViewData["SearchParams"] != null)
+{
+    <br />
+    <div class="row justify-content-center"><span> <p class="alert alert-danger" style="display:inline-flex">@ViewData["SearchParams"] </p></span></div>
+}
+
+@if (@Model == null && @TempData["customer"] != null)
+{
+    <br />
+    <div class="row justify-content-center">
+        <span><p class="alert alert-danger" style="display:inline-flex">No Customer exist</p></span>
+    </div>
+}

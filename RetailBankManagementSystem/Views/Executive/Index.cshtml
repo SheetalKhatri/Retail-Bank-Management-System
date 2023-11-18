@@ -1,0 +1,96 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using RetailBankManagementSystem.ViewModels
+@model RetailBankManagementSystem.Models.PagingList<RetailBankManagementSystem.Models.Customer>
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h5>What would you like to do today, @User.Identity.Name.Split('@')[0][0].ToString().ToUpper()@User.Identity.Name.Split('@')[0].Substring(1)?</h5>
+<br />
+<div class="container">
+    <table class="table table-bordered table-sm" style="background-color:white">
+        <thead class="thead-dark">
+        <th>Customer ID</th>
+        <th>SSN</th>
+        <th>Actions</th>
+        </thead>
+        @foreach (Customer c in Model)
+        {
+            <tr>
+                <td>@c.CustomerID</td>
+                <td>*****@c.SSN.ToString().Substring(5)</td>
+                <td>
+                    @Html.ActionLink("Delete", "DeleteCustomer", new { CustomerID = c.CustomerID }) |
+                    @Html.ActionLink("Update", "UpdateCustomer", new { CustomerID = c.CustomerID }) |
+                    @Html.ActionLink("Create Account", "CreateAccount", new { CustomerID = c.CustomerID })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+@if (@TempData["customerAddSuccess"] != null)
+{
+    <div class="row justify-content-center">
+        <span class="alert alert-success alert-dismissible fade show small" style="text-align: center; display: inline-flex">@TempData["customerAddSuccess"]<button class="close " data-dismiss="alert">&times;</button></span>
+    </div>
+}
+@if (@TempData["customerAddFail"] != null)
+{
+    <div class="row justify-content-center">
+        <span class="alert alert-warning alert-dismissible fade show small" style="text-align: center; display: inline-flex">@TempData["customerAddFail"]<button class="close " data-dismiss="alert">&times;</button></span>
+    </div>
+}
+@if (@TempData["customerUpdateSuccess"] != null)
+{
+    <div class="row justify-content-center">
+        <span class="alert alert-success alert-dismissible fade show small" style="text-align: center; display: inline-flex">@TempData["customerUpdateSuccess"]<button class="close " data-dismiss="alert">&times;</button></span>
+    </div>
+}
+@if (@TempData["account"] != null)
+{
+    <div class="row justify-content-center">
+        <span class="alert alert-success alert-dismissible fade show small" style="text-align: center; display: inline-flex">@TempData["account"]<button class="close " data-dismiss="alert">&times;</button></span>
+    </div>
+}
+@if (@TempData["accountCreated"] != null)
+{
+    <div class="row justify-content-center">
+        <span class="alert alert-success alert-dismissible fade show small" style="text-align: center; display: inline-flex">@TempData["accountCreated"]<button class="close " data-dismiss="alert">&times;</button></span>
+    </div>
+}
+<br />
+
+<script type="text/javascript">
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).hide();
+            });
+        }, 5000);
+</script>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    var totalPageNo = Model.TotalPageNo;
+    var currentPageNo = Model.PageIndex;
+}
+
+<div class="row justify-content-center">
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       class="btn @prevDisabled " style="text-decoration: underline">
+        << prev
+    </a>
+    <span>
+        Page : @currentPageNo of @totalPageNo
+    </span>
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       class="btn @nextDisabled" style="text-decoration: underline">
+        next >>
+    </a>
+</div>

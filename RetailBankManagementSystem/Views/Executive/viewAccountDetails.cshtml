@@ -1,0 +1,125 @@
+﻿@model Account
+@{
+    ViewData["Title"] = "DeleteAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4 class="text-center ">New Account Details</h4>
+<hr />
+<br />
+
+<style>
+    .myformcontainer {
+        display: flex;
+        margin: auto;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 10px;
+        color: white;
+        background-color: lavender;
+        border-radius: 10px;
+        box-shadow: 0 0.4px 0.4px rgba(128, 128, 128, 0.109), 0 1px 1px rgba(128, 128, 128, 0.155), 0 2.1px 2.1px rgba(128, 128, 128, 0.195), 0 4.4px 4.4px rgba(128, 128, 128, 0.241), 0 12px 12px rgba(128, 128, 128, 0.35);
+        */
+    }
+
+    .containers {
+        height: 60px;
+        margin-left: -150px;
+        position: relative;
+    }
+
+    .vertical-center {
+        margin-left: 10px;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+
+    h1 {
+        margin-bottom: 5px;
+    }
+</style>
+
+
+<div class="row justify-content-center" style="margin:auto">
+    <form class="myformcontainer">
+        <table class="table table-borderless d-sm-table-cell table-sm">
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="CustomerID"></label>
+                </td>
+                <td>
+                    @Model.CustomerID
+                    <input type="hidden" asp-for="CustomerID" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="AccountID"></label>
+                </td>
+                <td>
+                    @Model.AccountID
+                    <input type="hidden" asp-for="AccountID" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="AccountStatus"></label>
+                </td>
+                <td>
+                    @Model.AccountStatus
+                    <input type="hidden" asp-for="AccountStatus" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="AccountType"></label>
+                </td>
+                <td>
+                    @Model.AccountType.Split('@')[0][0].ToString().ToUpper()@Model.AccountType.Split('@')[0].Substring(1)
+                    <input type="hidden" asp-for="AccountType" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="Balance"></label>
+                </td>
+                <td>
+                    @Model.Balance
+                    <input type="hidden" asp-for="Balance" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="CreateDate"></label>
+                </td>
+                <td>
+                    @Model.CreateDate.ToString("MM/dd/yyyy")
+                    <input type="hidden" asp-for="CreateDate" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="LastUpdated"></label>
+                </td>
+                <td>
+                    @Model.LastUpdated.ToString("MM/dd/yyyy")
+                    <input type="hidden" asp-for="LastUpdated" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label style="font-weight:bold" asp-for="Duration"></label>
+                </td>
+                <td>
+                    @Model.Duration Days
+                    <input type="hidden" asp-for="Duration" />
+                </td>
+            </tr>
+
+        </table>
+         <a asp-controller="Executive" asp-action="Index" style="margin:auto" class="btn btn-dark">Home</a> 
+    </form>
+</div>

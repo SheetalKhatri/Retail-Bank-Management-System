@@ -1,0 +1,224 @@
+﻿@using RetailBankManagementSystem.Models
+@model PagingList<AccountStatement>
+@{
+    ViewData["Title"] = "ViewStatement";
+}
+
+<h5>Statement</h5>
+<hr />
+<br />
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    var totalPageNo = Model.TotalPageNo;
+    var currentPageNo = Model.PageIndex;
+}
+
+@if (Model.NumItems == 0)
+{
+    <div class="row justify-content-center">
+        <span class="alert alert-danger alert-dismissible fade show small" style="text-align: center; display: inline-flex">No transactions were made on this account<button class="close " data-dismiss="alert">&times;</button></span>
+    </div>
+}
+else
+{
+    <div>
+        <form onsubmit="return validate()">
+            <table>
+                <tr>
+                    <td>
+                        <label name="Count">No. of Transactions</label>
+                        <input type="number" name="Count" id="Count" />
+                        <br />
+                        <span id="error-mess" class="text-danger"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-left: 60px;"><b>OR</b></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label name="DateRange">Date Range:</label>
+                        <label name="FromDate">From</label>
+                        <input type="date" name="FromDate" id="FromDate" />
+                        <label name="ToDate">To</label>
+                        <input type="date" name="ToDate" id="ToDate" />
+                        <br />
+                        <span id="error-message" class="text-danger"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="Search" class="btn btn-primary" />
+                        <a asp-controller="Cashier" asp-action="Index" style="margin:auto" class="btn btn-dark">Home</a>
+
+                    </td>
+                </tr>
+                <script type="text/javascript">
+                    //disables one when another is filled
+                    function onDateChange() {
+                        var from = document.getElementById('FromDate').value;
+                        var to = document.getElementById('ToDate').value;
+                        if (from == '' && to == '') {
+                            document.getElementById('Count').disabled = false;
+                        }
+                        else {
+                            document.getElementById('Count').disabled = true;
+                        }
+                    }
+
+                    document.getElementById('Count').onchange = function () {
+                        if (this.value != '') {
+                            document.getElementById("FromDate").disabled = true;
+                            document.getElementById("ToDate").disabled = true;
+
+                        }
+                        else {
+                            document.getElementById("FromDate").disabled = false;
+                            document.getElementById("ToDate").disabled = false;
+
+                        }
+                    }
+
+                    document.getElementById('FromDate').onchange = onDateChange;
+                    document.getElementById('ToDate').onchange = onDateChange;
+
+                    // returns the current date in yyyy/mm/dd format.
+                    function get_current_date() {
+                        var now = new Date();
+                        var year = now.getFullYear();
+                        var month = (now.getMonth() + 1).toString().padStart(2, '0');
+                        var day = now.getDate().toString().padStart(2, '0');
+
+                        return `${year}-${month}-${day}`
+                    }
+                    //validation functions for date and n transaction
+
+                    function validateDates() {
+                        var from = document.getElementById('FromDate').value;
+                        var to = document.getElementById('ToDate').value;
+
+                        var has_from = from != '';
+                        var has_to = to != '';
+
+                        if (!has_from && !has_to) {
+                            return true;
+                        }
+
+                        if (has_from ^ has_to) {
+
+                            document.getElementById('error-message').innerHTML = "Both from and to date must be filled";
+                            return false;
+                        }
+                        if (from > to) {
+                            document.getElementById('error-message').innerHTML = "To date must be greater than or equal to from date";
+                            return false;
+                        }
+                        debugger
+                        if (to <= get_current_date()) return true;
+                        else {
+                            document.getElementById('error-message').innerHTML = "To date cannot be future date";
+                            return false;
+                        }
+                    }
+                    function validateCount() {
+                        debugger;
+                        var count = document.getElementById('Count').value;
+                        if (count && (count < 1 || count > 10)) {
+                            document.getElementById('error-mess').innerHTML = "No. of transactions should be between 1 to 10";
+                            return false;
+                        }
+                        else return true;
+                    }
+
+                    function validate() {
+                        //to clear previous error message
+                        document.getElementById('error-mess').innerHTML = "";
+                        document.getElementById('error-message').innerHTML = "";
+                        var from = document.getElementById('FromDate').value;
+                        var to = document.getElementById('ToDate').value;
+                        var count = document.getElementById('Count').value;
+                        if (from == '' && count == '' && to == '') {
+                            document.getElementById('error-mess').innerHTML = "Valid no. of transaction or dates should be provided";
+                            return false;
+                        }
+
+                        var is_valid = validateCount();
+                        if (!is_valid) return false;
+
+                        is_valid = validateDates();
+                        if (!is_valid) return false;
+                        document.getElementById('error-mess').innerHTML = "";
+                        document.getElementById('error-message').innerHTML = "";
+                        return true;
+
+                    }
+                </script>
+            </table>
+        </form>
+    </div>
+    <br>
+    <br />
+    <table class="table table-bordered table-sm">
+        <thead class="thead-dark">
+        <th>Account ID</th>
+        <th>Transaction ID</th>
+        <th>Transaction Type</th>
+        <th>Amount</th>
+        <th>Transaction Date</th>
+        </thead>
+
+        @foreach (var transaction in Model)
+        {
+            <tr>
+                <td> @transaction.AccountID</td>
+                <td> @transaction.TransactionID</td>
+                <td> @transaction.TransactionType.Substring(0, 1).ToUpper()@transaction.TransactionType.Substring(1)</td>
+                <td> $@transaction.Amount</td>
+                <td> @transaction.TransactionDate.ToString("MM/dd/yyyy")</td>
+            </tr>
+        }
+    </table>
+
+    <div class="row justify-content-center">
+        <a asp-action="ViewStatement"
+           asp-route-PageIndex="@(Model.PageIndex - 1)"
+           asp-route-PageSize="@Model.PageSize"
+           asp-route-Count="@Model.NumItems"
+           asp-route-FromDate='@Context.Request.Query["FromDate"]'
+           asp-route-ToDate='@Context.Request.Query["ToDate"]'
+           style="text-decoration: underline"
+           class="btn btn-link @prevDisabled">
+            &lt;&lt; prev
+        </a>
+
+        <span>
+            Page : @currentPageNo of @totalPageNo
+        </span>
+
+        <a asp-action="ViewStatement"
+           asp-route-PageIndex="@(Model.PageIndex + 1)"
+           asp-route-PageSize="@Model.PageSize"
+           asp-route-Count="@Model.NumItems"
+           asp-route-FromDate='@Context.Request.Query["FromDate"]'
+           asp-route-ToDate='@Context.Request.Query["ToDate"]'
+           style="text-decoration: underline"
+           class="btn btn-link @nextDisabled">
+            next >>
+
+        </a>
+    </div>
+
+}
+
+<script type="text/javascript">
+    window.setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).hide();
+        });
+    }, 5000);
+</script>
+
+
+
